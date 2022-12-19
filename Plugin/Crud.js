@@ -1,13 +1,34 @@
 class Crud {
-  constructor(schema, name) {
+  constructor(name, schema, responseModel) {
     this.dataList = new Array();
-    (this.name = "Task"), (this.schema = ["taskName", "status"]);
+    this.name = name;
+    this.schema = schema;
+    this.responses = responseModel;
   }
   // to be implemented
   Create = async (request, response) => {
     request.body.data.id = Date.now();
-    this.dataList.push(request.body.data);
-    response.json(this.dataList);
+    let res = this.dataList.push(request.body.data);
+    let receivedData = request.body.data;
+    // successFully Created Task
+    if (res) {
+      let statusCode = this.responses.Create.onSuccess.statusCode;
+      let message = this.responses.Create.onSuccess.message;
+      let data = receivedData;
+
+      response.status(statusCode).json({
+        message,
+        data,
+      });
+    } else {
+      let statusCode = this.responses.Create.onFailure.statusCode;
+      let message = this.responses.Create.onFailure.message;
+      let data = data;
+
+      response.status(statusCode).json({
+        message,
+      });
+    }
   };
   // to be implemented
   Update = async (request, response) => {};

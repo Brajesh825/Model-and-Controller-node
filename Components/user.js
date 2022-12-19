@@ -7,12 +7,12 @@ let crud = new Crud("User", {
   email: {
     type: Boolean,
   },
-  password : {
-    type: String
-  }
+  password: {
+    type: String,
+  },
 });
 
-let Users = [
+let User = [
   {
     name: "Create",
     path: "/User/Create",
@@ -45,4 +45,5 @@ let Users = [
   },
 ];
 
-export { Users };
+
+export { User};

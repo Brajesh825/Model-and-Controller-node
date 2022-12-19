@@ -1,15 +1,35 @@
 import { Crud } from "../Plugin/Crud.js";
 
-let crud = new Crud("Task", {
+let taskSchema = {
+  id: {
+    type: String,
+  },
   name: {
-    name: String,
+    type: String,
   },
   status: {
-    status: Boolean,
+    type: Boolean,
   },
-});
+};
 
-let Tasks = [
+let taskResponseModel = {
+  Create: {
+    name: "Create",
+    onSuccess: {
+      statusCode: "201",
+      message: "Task SuccessFully Created",
+      return: ["id", "name", "status"],
+    },
+    onFailure: {
+      statusCode: "400",
+      message: "Task Failed To Create",
+      return: [],
+    },
+  },
+};
+
+let crud = new Crud("Task", taskSchema, taskResponseModel);
+let Task = [
   {
     name: "Create",
     path: "/Task/Create",
@@ -42,4 +62,4 @@ let Tasks = [
   },
 ];
 
-export { Tasks };
+export { Task };
