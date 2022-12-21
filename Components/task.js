@@ -13,6 +13,16 @@ class Auth {
 
 let auth = new Auth();
 
+
+let taskMVCSchema = {
+  model :{
+    taskSchema
+  },
+  response :{ taskResponseModel },
+  controller : {
+    Task
+  }
+
 let taskSchema = {
   id: {
     type: String,
