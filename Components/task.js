@@ -1,5 +1,18 @@
 import { Crud } from "../Plugin/Crud.js";
 
+class Auth {
+  call = async (fun, rr, data) => {
+    let res = await this[fun](...rr, data);
+    return res;
+  };
+
+  isAuthenticated = (req, res, data) => {
+    return true;
+  };
+}
+
+let auth = new Auth();
+
 let taskSchema = {
   id: {
     type: String,
@@ -13,6 +26,7 @@ let taskSchema = {
 };
 
 let taskResponseModel = {
+  statusCode: "400",
   Create: {
     name: "Create",
     onSuccess: {
@@ -28,37 +42,45 @@ let taskResponseModel = {
   },
 };
 
-let crud = new Crud("Task", taskSchema, taskResponseModel);
+const crud = new Crud("Task", taskSchema, taskResponseModel);
+
 let Task = [
   {
     name: "Create",
     path: "/Task/Create",
     method: "POST",
-    callback: crud.Create,
+    middleWare: [
+      {
+        callback: auth.call,
+        name: "isAuthenticated",
+        args: ["user", "admin", "moderator"],
+      },
+    ],
+    callback: crud.call,
   },
   {
-    name: "Delete",
+    name: "DeleteOne",
     path: "/Task/Delete/:id",
     method: "Delete",
-    callback: crud.DeleteOne,
+    callback: crud.call,
   },
   {
     name: "Update",
     path: "/Task/Update/:id",
     method: "PATCH",
-    callback: crud.Update,
+    callback: crud.call,
   },
   {
-    name: "Get All",
+    name: "GetAll",
     path: "/Task/GetALl",
     method: "POST",
-    callback: crud.GetAll,
+    callback: crud.call,
   },
   {
-    name: "Get One",
+    name: "GetOne",
     path: "/Task/GetOne/id",
     method: "POST",
-    callback: crud.GetOne,
+    callback: crud.call,
   },
 ];
 

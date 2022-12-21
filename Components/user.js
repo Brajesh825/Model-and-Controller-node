@@ -17,33 +17,32 @@ let User = [
     name: "Create",
     path: "/User/Create",
     method: "POST",
-    callback: crud.Create,
+    callback: crud.call,
   },
   {
     name: "Delete",
     path: "/User/Delete/:id",
     method: "Delete",
-    callback: crud.DeleteOne,
+    callback: crud.call,
   },
   {
     name: "Update",
     path: "/User/Update/:id",
     method: "PATCH",
-    callback: crud.Update,
+    callback: crud.call,
   },
   {
-    name: "Get All",
+    name: "GetAll",
     path: "/User/GetALl",
     method: "POST",
-    callback: crud.GetAll,
+    callback: crud.call,
   },
   {
-    name: "Get One",
+    name: "GetOne",
     path: "/User/GetOne/id",
     method: "POST",
-    callback: crud.GetOne,
+    callback: crud.call,
   },
 ];
 
-
-export { User};
+export { User };
