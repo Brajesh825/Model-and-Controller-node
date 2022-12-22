@@ -17,7 +17,7 @@ const Config = {
   },
   Components: {
     Task: "/Components/task.js",
-    User: "/Components/user.js",
+    // User: "/Components/user.js",
   },
 };
 

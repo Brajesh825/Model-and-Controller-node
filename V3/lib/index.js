@@ -22,7 +22,7 @@ class Core extends Importable {
     this.functions["response"] = this.imports["Response"]["response"];
 
     // working routes
-    this.activeComponents["User"] = this.Components["User"]["User"];
+    // this.activeComponents["User"] = this.Components["User"]["User"];
     this.activeComponents["Task"] = this.Components["Task"]["Task"];
 
     // instances
@@ -40,8 +40,8 @@ class Core extends Importable {
   }
 
   async startComponents() {
-    this.instances.router.addRoutes(this.activeComponents["User"]);
-    this.instances.router.addRoutes(this.activeComponents["Task"]);
+    // this.instances.router.addRoutes(this.activeComponents["User"]);
+    this.instances.router.addRoutes(this.activeComponents["Task"].controllers);
   }
 
   async init() {
