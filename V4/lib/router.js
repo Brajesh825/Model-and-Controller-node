@@ -30,6 +30,8 @@ class Router {
   }
 
   async resolveRequest(request, response) {
+    console.log(request.url);
+
     const route = this.routes.find((route) => {
       let res = this.matchPath(route.path, request.url);
       if (res.matched) {
@@ -38,7 +40,9 @@ class Router {
         return res;
       }
     });
-    if (!route) {
+
+      if (!route) {
+      console.log("Invalid Route");
       return response.json({
         Success: false,
       });
@@ -64,12 +68,19 @@ class Router {
 
     // last method
     let res = await route.callback(route.name, [request, response]);
+    try {
+      if (!response.headerSent && request.method.toUpperCase()=="GET" ) {
+        let type = request?.query?.type || "HTML";
 
-    if (!response.headerSent) {
-      let result = this.views["GetOne"](res);
-
-      return response.end(res);
-    }
+        let { json, html } = this.views[route.name](res);
+        if (type.toUpperCase() == "JSON") {
+          return response.json(json);
+        } else {
+          response.setHeader("Content-Type", "text/html");
+          return response.end(html);
+        }
+      }
+    } catch (error) {}
   }
   matchPath = (setupPath, currentPath) => {
     const setupPathArray = setupPath.split("/");

@@ -1,7 +1,7 @@
 import { Plugin } from "../lib/plugin.js";
 class Crud extends Plugin {
   constructor(name, schema, responseModel) {
-    super()
+    super();
     this.dataList = new Array();
     this.name = name;
     this.schema = schema;
@@ -45,16 +45,25 @@ class Crud extends Plugin {
         this.dataList = list;
         response.json(this.dataList);
       },
+      // Get All Item Contained within datalist
       GetAll: async (request, response) => {
         return this.dataList;
       },
+      // return one item contained wthin datalist
       GetOne: async (request, response) => {
-        return this.dataList
+        let id = request.params.id;
+        let res;
+        for (const item of this.dataList) {
+          if (item.id == request.params.id) {
+            res = item;
+            break;
+          }
+        }
+        return res;
       },
     };
     this.plugins = {};
   }
-
 }
 
 export { Crud };

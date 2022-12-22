@@ -1,6 +1,14 @@
 import { Crud } from "../Plugin/Crud.js";
 import { Auth } from "../Plugin/Auth.js";
 
+// task Template
+const taskTemplate = (task) => `
+<section >
+  <h3> ${task.name} </h3>  
+  <h4> ${task.status} </h4>  
+</section>
+`;
+
 // task schema
 let schema = {
   id: {
@@ -46,13 +54,13 @@ const Create = {
     name: "Create",
     path: "/Task/Create",
     method: "POST",
-    middleWare: [
-      {
-        callback: plugins.auth.call,
-        name: "isAuthenticated",
-        args: ["user", "admin", "moderator"],
-      },
-    ],
+    // middleWare: [
+    //   {
+    //     callback: plugins.auth.call,
+    //     name: "isAuthenticated",
+    //     args: ["user", "admin", "moderator"],
+    //   },
+    // ],
     callback: plugins.crud.call,
   },
 };
@@ -70,34 +78,27 @@ const DeleteOne = {
     callback: plugins.crud.call,
   },
 };
-// Get All
+
+// Get One
 const GetOne = {
   name: "GetOne",
   model: {
     tasks: [],
   },
   view(model) {
-    if (model && !model[0]) {
-      return `<h3>Not Fount</h3>`;
+    if (!model) {
+      return {
+        html: `<h3>Not Found</h3>`,
+        json: { message: "Not Found" },
+      };
     }
-    let item = model[0];
+    let json = model;
+    let html = taskTemplate(json);
 
-    let html = `
-    <ul>
-      <li>
-        name : ${item?.name}
-      </li>
-      <li>
-        status : ${item?.name}
-      </li>
-      <li>
-        id : ${item.id}
-      </li>
-    </ul>`
-
-    console.log(html);
-
-    return html;
+    return {
+      html,
+      json,
+    };
   },
   controller: {
     name: "GetOne",
@@ -107,10 +108,43 @@ const GetOne = {
   },
 };
 
+// Get All
+const GetAll = {
+  name: "GetAll",
+  model: {
+    tasks: [],
+  },
+  view(model) {
+    
+    if (!model) {
+      return {
+        html: `<h3>Not Found</h3>`,
+        json: { message: "List is Empty" },
+      };
+    }
+    let json = model;
+    let html = "";
+    for (const task of model) {
+      html += taskTemplate(task);
+    }
+    return {
+      html,
+      json,
+    };
+  },
+  controller: {
+    name: "GetAll",
+    path: "/Task/GetAll",
+    method: "Get",
+    callback: plugins.crud.call,
+  },
+};
+
 const Task = {
   Create,
   DeleteOne,
   GetOne,
+  GetAll
 };
 
 export { Task };

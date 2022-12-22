@@ -47,8 +47,10 @@ class Parser {
   // }
 
   async parse(req) {
-    let data = await this.getReqData(req);
-    req.body = JSON.parse(data);
+    if (req.method != "GET") {
+      let data = await this.getReqData(req);
+      req.body = JSON.parse(data);
+    }
   }
 }
 
